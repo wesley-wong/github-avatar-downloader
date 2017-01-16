@@ -1,0 +1,23 @@
+{
+  "name": "github-avatar-downloader",
+  "version": "1.0.0",
+  "description": "### Goal In this project you'll build a command-line HTTP client that will request the avatars for all contributers to a given project on GitHub, and download them to disk.",
+  "main": "download_avatars.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trrippy/github-avatar-downloader.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/trrippy/github-avatar-downloader/issues"
+  },
+  "homepage": "https://github.com/trrippy/github-avatar-downloader#readme",
+  "dependencies": {
+    "request": "^2.79.0"
+  }
+}
