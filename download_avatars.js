@@ -28,23 +28,13 @@ function getRepoContributors(repoOwner, repoName, cb) {
       "User-Agent" : "GitHub Avatar Downloader - Student Project"
     }
   }
-  var output = '';
   // Request for information from github
   request.get(requestOptions, cb)
 
 }
 
-getRepoContributors(repoOwner, repoName, function(err, result) {
-  console.log("Errors:", err);
-  var resultObj = JSON.parse(result.body);
-  resultObj.forEach((item) => downloadImageByUrl(item.avatar_url, folderPath + item.login + '.jpg'));
-});
-
-
 
 function downloadImageByUrl(url, filePath){
-  console.log(url);
-  console.log(filePath);
   request.get(url)
        .on('error', function (err) {
          throw console.log('Well, that didnt\' work', err);
@@ -55,3 +45,9 @@ function downloadImageByUrl(url, filePath){
        .pipe(fs.createWriteStream(filePath));
 
 }
+
+getRepoContributors(repoOwner, repoName, function(err, result) {
+  console.log("Errors:", err);
+  var resultObj = JSON.parse(result.body);
+  resultObj.forEach((item) => downloadImageByUrl(item.avatar_url, folderPath + item.login + '.jpg'));
+});
