@@ -5,6 +5,12 @@ var repoName = input[1];
 const fs = require("fs");
 const request = require('request');
 
+
+require('dotenv').config()
+
+const GITHUB_USER = process.env.DB_USER;
+const GITHUB_TOKEN = process.env.DB_PASS;
+
 const folderPath = "avatars/";
 
 // Make new Folder 'avatar' and handles error if it exists
@@ -15,9 +21,6 @@ var mkdirSync = function () {
     if ( e.code != 'EEXIST' ) throw e;
   }
 }();
-
-const GITHUB_USER = "trrippy";
-const GITHUB_TOKEN = "767510ebf3298c6299bbaa47e1661f34891a82b2";
 
 
 function getRepoContributors(repoOwner, repoName, cb) {
