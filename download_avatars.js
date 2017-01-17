@@ -37,7 +37,6 @@ function getRepoContributors(repoOwner, repoName, cb) {
 getRepoContributors(repoOwner, repoName, function(err, result) {
   console.log("Errors:", err);
   var resultObj = JSON.parse(result.body);
-  // resultObj.forEach((item) => console.log(item.login));
   resultObj.forEach((item) => downloadImageByUrl(item.avatar_url, folderPath + item.login + '.jpg'));
 });
 
@@ -46,22 +45,13 @@ getRepoContributors(repoOwner, repoName, function(err, result) {
 function downloadImageByUrl(url, filePath){
   console.log(url);
   console.log(filePath);
-  request.get(url)               // Note 1
-       .on('error', function (err) {                                   // Note 2
+  request.get(url)
+       .on('error', function (err) {
          throw console.log('Well, that didnt\' work', err);
        })
-       .on('response', function (response) {                           // Note 3
+       .on('response', function (response) {
          console.log('Response Status Code: ', response.statusCode);
        })
        .pipe(fs.createWriteStream(filePath));
 
-  /*
-  fs.createWriteStream(filePath, fileData, function(err) {
-  if (err) {
-    throw err;
-  }
-  console.log("Successfully wrote to", filePath);
-
-});
-*/
 }
