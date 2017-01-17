@@ -1,14 +1,16 @@
-const input = process.argv.slice(1);
+const input = process.argv.slice(2);
+var repoOwner = input[0];
+var repoName = input[1];
 
 const fs = require("fs");
 const request = require('request');
 
-const folderPath = "/avatars/";
+const folderPath = "avatars/";
 
 // Make new Folder 'avatar' and handles error if it exists
 var mkdirSync = function () {
   try {
-    fs.mkdirSync("avatar");
+    fs.mkdirSync("avatars");
   } catch(e) {
     if ( e.code != 'EEXIST' ) throw e;
   }
@@ -16,11 +18,9 @@ var mkdirSync = function () {
 
 const GITHUB_USER = "trrippy";
 const GITHUB_TOKEN = "767510ebf3298c6299bbaa47e1661f34891a82b2";
-repoOwner = 'jquery';
-repoName = 'jquery';
-function getRepoContributors(repoOwner, repoName, cb) {
-  // ...
 
+
+function getRepoContributors(repoOwner, repoName, cb) {
 
   var requestOptions = {
     url : 'https://'+ GITHUB_USER + ':' + GITHUB_TOKEN + '@api.github.com/repos/' + repoOwner + '/' + repoName + '/contributors',
@@ -30,85 +30,38 @@ function getRepoContributors(repoOwner, repoName, cb) {
   }
   var output = '';
   // Request for information from github
-  request.get(requestOptions, cb)               // Note 1
-          /*
-         .on('error', function (err) {                                   // Note 2
-           throw console.log('Well, that didnt\' work', err);
-         })
-         .on('response', function (response) {                           // Note 3
-           console.log('Response Status Code: ', response.statusCode);
-         })
-         WHY YOU NO WORRrrrRRRRRRKKkKKK
-         .on('data', function (chunk) {
-
-          output += chunk;
-         })
-         .end('end', () => console.log(output));
-           // console.log(response;
-           */
+  request.get(requestOptions, cb)
 
 }
 
 getRepoContributors(repoOwner, repoName, function(err, result) {
   console.log("Errors:", err);
   var resultObj = JSON.parse(result.body);
-  resultObj.forEach((item) => console.log(item.avatar_url))
+  // resultObj.forEach((item) => console.log(item.login));
+  resultObj.forEach((item) => downloadImageByUrl(item.avatar_url, folderPath + item.login + '.jpg'));
 });
 
-/*
-var GitHubApi = require("github");
 
 
-var github = new GitHubApi({
-    // optional
-    debug: true,
-    protocol: "https",
-    host: "api.github.com", // should be api.github.com for GitHub
-    pathPrefix: "/", // for some GHEs; none for GitHub
+function downloadImageByUrl(url, filePath){
+  console.log(url);
+  console.log(filePath);
+  request.get(url)               // Note 1
+       .on('error', function (err) {                                   // Note 2
+         throw console.log('Well, that didnt\' work', err);
+       })
+       .on('response', function (response) {                           // Note 3
+         console.log('Response Status Code: ', response.statusCode);
+       })
+       .pipe(fs.createWriteStream(filePath));
 
-    headers: {
-        "user-agent": "github-avatar-downloader" // GitHub is happy with a unique user agent
-    },
-    Promise: require('bluebird'),
-    followRedirects: true, // default: true; there's currently an issue with non-get redirects, so allow ability to disable follow-redirects
-    timeout: 5000
-});
-
-// TODO: optional authentication here depending on desired endpoints. See below in README.
-
-/*
-github.users.getFollowingForUser({
-    // optional
-    // headers: {
-    //     "cookie": "blahblah"
-    // },
-    username: "defunkt"
-}, function(err, res) {
-    console.log(JSON.stringify(res));
-});
-
-github.repos.getContributors({
-  owner: "trrippy",
-  repo: "hello-world"
-}, function (err, res) {
-  console.log(JSON.stringify(res));
-  console.log(res);
-  // body...
-});
-// console.log('This is the output of contributors \n');
-// console.log(contributors);
-
-//GET /users/:username obj.avatar_url this is the gif
-
-
-
-
-//this will write to file the photo, hopefully
-
-fs.writeFile(filePath, fileData, function(err) {
+  /*
+  fs.createWriteStream(filePath, fileData, function(err) {
   if (err) {
     throw err;
   }
   console.log("Successfully wrote to", filePath);
+
 });
 */
+}
