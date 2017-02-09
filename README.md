@@ -1,4 +1,5 @@
 # Project Description
+*This was the project for the second week of Lighthouse Labs*
 
 ### Goal
 In this project you'll build a command-line HTTP client that will request the avatars for all contributers to a given project on GitHub, and download them to disk.
